@@ -1,6 +1,6 @@
 Simplified examples using the memory.wasm module from [wasm-stdlib-hack](https://github.com/guybedford/wasm-stdlib-hack) by [guybedford](guybedford) demonstrating the problem introduced by adding and using a const array.
 
-main.withconstfloatarr.opt.wam and main.sansconstfloararr.opt.wam were produced by compiling the corresponding cpp file with clang, 
+`main.withconstfloatarr.opt.wasm` and `main.sansconstfloatarr.opt.wasm` were produced by compiling the corresponding cpp file with clang, 
 converting to s-expressions with llc, converting to wat with s2wasm, compiling wat to wasm with wat2wasm and then optimising the wasm file
 with wasm-opt. 
 
