@@ -34,7 +34,9 @@
         })
         .then(m => {
           mod = m;
-          console.log(mod.exports.GetFloatArr(8));
+          let offset = mod.exports.GetFloatArr(8);
+          let array = new Float32Array(mem.buffer.slice(offset, offset+4*8));
+          console.log(array);
         });
       });
     </script>
