@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <script>
+      function fetchAndCompileWasmModule(urls) {
+        return Promise.all(urls.map(url => {
+          return fetch(url)
+          .then(res => {
+            if(res.ok)
+              return res.arrayBuffer();
+            throw new Error("Unable to fetch WebAssembly file ${url}");
+          })
+          .then(bytes => WebAssembly.compile(bytes));
+        }));
+      }
+
+      let mem = new WebAssembly.Memory({initial: 1});
+      let mod = null;
+      fetchAndCompileWasmModule(["./main.sansconstfloatarr.opt.wasm", "./memory.wasm"])
+      .then(([main, memory]) => {
+        return WebAssembly.instantiate(memory, {
+          env: {
+            memory: mem
+          }
+        })
+        .then(m => {
+          return WebAssembly.instantiate(main, {
+            env: {
+              malloc: m.exports.malloc,
+              free: m.exports.free,
+              memcpy: m.exports.memcpy,
+              memory: mem
+            }
+          });
+        })
+        .then(m => {
+          mod = m;
+          console.log(mod.exports.GetFloatArr(8));
+        });
+      });
+    </script>
+  </head>
+</html>
